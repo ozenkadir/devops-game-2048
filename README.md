@@ -13,7 +13,7 @@ I chose to use scripts instead of Ansible to keep the setup **simple, lightweigh
 - [Topology](#topology)
 - [Setup Instructions](#setup-instructions)
   - [Manual Setup](#manual-setup)
-  - [Automated Setup (Script)](#automated-setup-script)
+  - [Automated Setup (Script)](#automated-setup-(script))
 - [Accessing the Game](#accessing-the-game)
 - [Troubleshooting](#troubleshooting)
 
@@ -198,6 +198,7 @@ If you don’t do these steps, your hosts file won’t have the entry 127.0.0.1 
 ### 💬 Questions
 
 If you have any questions or need clarification regarding this project, feel free to ask. Your feedback is always welcome!
+
 
 
 
