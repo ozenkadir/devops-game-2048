@@ -23,11 +23,11 @@ I chose to use scripts instead of Ansible to keep the setup **simple, lightweigh
 
 Ensure the following tools are installed on your local machine:
 
-- [Docker](https://www.docker.com/get-started)  
-- [Kind](https://kind.sigs.k8s.io/)  
-- [kubectl](https://kubernetes.io/docs/tasks/tools/)  
-- [Git](https://git-scm.com/)  
-- [VSCode](https://code.visualstudio.com/) or any other code editor  (Optional)
+- [Docker](https://www.docker.com/get-started) (min version 20.10.x)  
+- [Kind](https://kind.sigs.k8s.io/) (min version 0.20.x)  
+- [kubectl](https://kubernetes.io/docs/tasks/tools/) (min version 1.26.x)  
+- [Git](https://git-scm.com/) (min version 2.30.x)  
+- [VSCode](https://code.visualstudio.com/) or any other code editor (Optional)
 
 ---
 
@@ -200,5 +200,6 @@ If you don’t do these steps, your hosts file won’t have the entry 127.0.0.1 
 ### 💬 Questions
 
 If you have any questions or need clarification regarding this project, feel free to ask. Your feedback is always welcome!
+
 
 
