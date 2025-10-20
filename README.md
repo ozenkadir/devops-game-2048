@@ -122,36 +122,34 @@ sudo systemd-resolve --flush-caches  # Linux
 ```
 
 ### ⚙️ Automated Setup (Script)
- You can also deploy everything automatically using the provided scripts inside the scripts/ folder.
-### 1️⃣ Clone the Repository
 
-```bash
-git clone 
-cd devops-2048
-```
+###  Clone the Repository and Run Script
 
-### 2️⃣ Run Scripts 
- Run PowerShell as Administrator
-For Windows:
+For Windows:  
+*Run PowerShell as Administrator*
 ```bash
-cd scripts
-.\deploy.ps1
+git clone https://github.com/ozenkadir/devops-game-2048.git
+cd devops-game-2048
+.\scripts\deploy.ps1
 ```
 
 For Linux/macOS:
 ```bash
+git clone https://github.com/ozenkadir/devops-game-2048.git
+cd devops-game-2048
 chmod +x scripts/deploy.sh
 ./scripts/deploy.sh
 ```
-These scripts will:
-Check if Docker, Kind, and kubectl are installed
-Build the Docker image
-Create a Kind cluster
-Load the image into the cluster
-Deploy Nginx Ingress and the game manifests
-Update your hosts file automatically
-Flush DNS cache
-Make the game accessible at http://2048.local
+
+**These scripts will:**
+- Check if Docker, Kind, and kubectl are installed
+- Build the Docker image
+- Create a Kind cluster
+- Load the image into the cluster
+- Deploy Nginx Ingress and the game manifests
+- Update your hosts file automatically
+- Flush DNS cache
+- Make the game accessible at http://2048.local
 
 ## Accessing the Game
 #### ✅ Now you can open your browser and go to: 
@@ -200,6 +198,7 @@ If you don’t do these steps, your hosts file won’t have the entry 127.0.0.1 
 ### 💬 Questions
 
 If you have any questions or need clarification regarding this project, feel free to ask. Your feedback is always welcome!
+
 
 
 
