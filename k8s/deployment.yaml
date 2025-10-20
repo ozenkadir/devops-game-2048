@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tile-2048
+  namespace: game
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tile-2048
+  template:
+    metadata:
+      labels:
+        app: tile-2048
+    spec:
+      containers:
+      - name: tile-2048
+        image: tile-2048-game:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
