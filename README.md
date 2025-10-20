@@ -53,7 +53,7 @@ Ensure the following tools are installed on your local machine:
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone 
+git clone https://github.com/ozenkadir/devops-game-2048.git
 cd devops-2048
 ```
 
@@ -200,4 +200,5 @@ If you don’t do these steps, your hosts file won’t have the entry 127.0.0.1 
 ### 💬 Questions
 
 If you have any questions or need clarification regarding this project, feel free to ask. Your feedback is always welcome!
+
 
