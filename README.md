@@ -121,7 +121,7 @@ sudo dscacheutil -flushcache       # macOS
 sudo systemd-resolve --flush-caches  # Linux
 ```
 
-### ⚙️ Automated Setup (Script)
+## ⚙️ Automated Setup (Script)
 
 ###  Clone the Repository and Run Script
 
@@ -198,6 +198,7 @@ If you don’t do these steps, your hosts file won’t have the entry 127.0.0.1 
 ### 💬 Questions
 
 If you have any questions or need clarification regarding this project, feel free to ask. Your feedback is always welcome!
+
 
 
 
