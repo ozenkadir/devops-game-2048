@@ -34,39 +34,41 @@ kind load docker-image $IMAGE_NAME --name $CLUSTER_NAME
 Write-Host "Deploying Nginx Ingress..."
 kubectl apply -f $INGRESS_NGINX_URL
 
-# --- 5️⃣ Wait for Ingress Controller to be FULLY ready ---
-Write-Host "Waiting for Ingress Controller to be ready (this may take 2-3 minutes)..."
+# --- 5️⃣ Wait for Ingress Controller to be fully ready ---
+Write-Host "Waiting for Ingress Controller pods to be Ready..."
+do {
+    $ingressPods = kubectl get pods -n ingress-nginx -l app.kubernetes.io/component=controller -o json | ConvertFrom-Json
 
-# Pod’ların oluşup Ready olmasını bekle
-kubectl wait --namespace ingress-nginx `
-  --for=condition=Ready pod `
-  --selector=app.kubernetes.io/component=controller `
-  --timeout=300s
+    $totalCount = $ingressPods.items.Count
+    $readyCount = 0
 
-# Final check
-Write-Host "Final status check..."
-kubectl get pods -n ingress-nginx
-kubectl get svc -n ingress-nginx
+    if ($totalCount -gt 0) {
+        foreach ($pod in $ingressPods.items) {
+            $readyCondition = $pod.status.conditions | Where-Object { $_.type -eq "Ready" -and $_.status -eq "True" }
+            if ($readyCondition) { $readyCount++ }
+        }
+    }
 
-Write-Host "✅ Ingress Controller is fully ready!"
+    Write-Host "Ingress controller ready pods: $readyCount / $totalCount"
+    Start-Sleep -Seconds 5
+
+} while ($readyCount -lt $totalCount -or $totalCount -eq 0)
+
+Write-Host "✅ Ingress Controller Ready!"
 
 
-# --- 6️⃣ Create Namespace and deploy Application ---
+
+# --- 6️⃣ Deploy Application ---
 Write-Host "Creating namespace and deploying application..."
-kubectl create ns $NAMESPACE
+kubectl create ns $NAMESPACE -o yaml --dry-run=client | kubectl apply -f -
 kubectl apply -f k8s/deployment.yaml -n $NAMESPACE
 kubectl apply -f k8s/service.yaml -n $NAMESPACE
 
-# --- 7️⃣ Wait for Application pods to be ready ---
-Write-Host "Waiting for application pods to be ready..."
-kubectl wait --namespace $NAMESPACE `
-  --for=condition=ready pod `
-  --selector=app=tile-2048 `
-  --timeout=120s
 
-# --- 8️⃣ NOW deploy Ingress ---
-Write-Host "Deploying Ingress (now that everything is ready)..."
-kubectl apply -f k8s/ingress.yaml -n $NAMESPACE
+# --- 8️⃣ Deploy Ingress ---
+Write-Host "Deploying Ingress..."
+kubectl apply --validate=false -f k8s/ingress.yaml -n $NAMESPACE
+
 
 # --- 9️⃣ Verify Ingress ---
 Write-Host "Verifying Ingress..."
