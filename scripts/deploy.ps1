@@ -37,28 +37,26 @@ kubectl apply -f $INGRESS_NGINX_URL
 # --- 5️⃣ Wait for Ingress Controller to be FULLY ready ---
 Write-Host "Waiting for Ingress Controller to be ready (this may take 3-4 minutes)..."
 
-# Önce pod'ların oluşmasını bekle
-Write-Host "Step 1: Waiting for Ingress Controller pods to be created..."
-$attempt = 0
-$maxAttempts = 30  # 5 dakika
+Start-Sleep -Seconds 20
 
-do {
-    $pods = kubectl get pods -n ingress-nginx --selector=app.kubernetes.io/component=controller --no-headers 2>$null
-    $attempt++
-    
-    if ($pods) {
-        Write-Host "Pods found, checking status..."
-        break
-    }
-    
-    Write-Host "Waiting for pods to be created... (attempt $attempt/$maxAttempts)"
-    Start-Sleep -Seconds 10
-    
-    if ($attempt -ge $maxAttempts) {
-        Write-Error "Timeout waiting for Ingress Controller pods to be created"
-        exit 1
-    }
-} while ($true)
+Write-Host "Step 1: Waiting for Ingress Controller pods to be ready..."
+kubectl wait --namespace ingress-nginx `
+  --for=condition=Ready pod `
+  --selector=app.kubernetes.io/component=controller `
+  --timeout=300s
+
+Write-Host "Step 2: Waiting for admission webhooks to be ready..."
+kubectl wait --namespace ingress-nginx `
+  --for=condition=Complete job `
+  --selector=app.kubernetes.io/component=admission-webhook `
+  --timeout=120s 2>$null
+
+Write-Host "Step 3: Final status check..."
+kubectl get pods -n ingress-nginx
+kubectl get svc -n ingress-nginx
+
+Write-Host "✅ Ingress Controller is fully ready!"
+
 
 # Pod'ların running durumuna gelmesini bekle
 Write-Host "Step 2: Waiting for Ingress Controller pods to be running..."
