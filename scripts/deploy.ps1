@@ -35,46 +35,21 @@ Write-Host "Deploying Nginx Ingress..."
 kubectl apply -f $INGRESS_NGINX_URL
 
 # --- 5️⃣ Wait for Ingress Controller to be FULLY ready ---
-Write-Host "Waiting for Ingress Controller to be ready (this may take 3-4 minutes)..."
+Write-Host "Waiting for Ingress Controller to be ready (this may take 2-3 minutes)..."
 
-Start-Sleep -Seconds 20
-
-Write-Host "Step 1: Waiting for Ingress Controller pods to be ready..."
+# Pod’ların oluşup Ready olmasını bekle
 kubectl wait --namespace ingress-nginx `
   --for=condition=Ready pod `
   --selector=app.kubernetes.io/component=controller `
   --timeout=300s
 
-Write-Host "Step 2: Waiting for admission webhooks to be ready..."
-kubectl wait --namespace ingress-nginx `
-  --for=condition=Complete job `
-  --selector=app.kubernetes.io/component=admission-webhook `
-  --timeout=120s 2>$null
-
-Write-Host "Step 3: Final status check..."
+# Final check
+Write-Host "Final status check..."
 kubectl get pods -n ingress-nginx
 kubectl get svc -n ingress-nginx
 
 Write-Host "✅ Ingress Controller is fully ready!"
 
-
-# Pod'ların running durumuna gelmesini bekle
-Write-Host "Step 2: Waiting for Ingress Controller pods to be running..."
-kubectl wait --namespace ingress-nginx `
-  --for=condition=Ready pod `
-  --selector=app.kubernetes.io/component=controller `
-  --timeout=300s
-
-# Admission webhook'larının hazır olması için ek bekleme
-Write-Host "Step 3: Waiting for admission webhooks to be ready..."
-Start-Sleep -Seconds 45
-
-# Final check - tüm ingress bileşenlerini kontrol et
-Write-Host "Step 4: Final status check..."
-kubectl get pods -n ingress-nginx
-kubectl get svc -n ingress-nginx
-
-Write-Host "✅ Ingress Controller is fully ready!"
 
 # --- 6️⃣ Create Namespace and deploy Application ---
 Write-Host "Creating namespace and deploying application..."
